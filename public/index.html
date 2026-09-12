@@ -1,0 +1,920 @@
+<!--
+  ID-CLOSE Vault (https://id-close.com)
+  Copyright (c) 2026 ID-CLOSE. All Rights Reserved.
+
+  PROPRIETARY AND CONFIDENTIAL.
+  Unauthorized copying, distribution, modification, or hosting of this software
+  via any medium is strictly prohibited without explicit written permission.
+  Licensed strictly for local security verification and code auditing.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID-CLOSE VAULT | Zero-Knowledge AES-256-GCM Secure Container</title>
+<meta name="description" content="Zero-Knowledge AES-256-GCM Secure Container. Air-Gapped Ready.">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Telegram, WhatsApp, Facebook) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://id-close.com/">
+<meta property="og:title" content="ID-CLOSE VAULT">
+<meta property="og:description" content="Zero-Knowledge AES-256-GCM Secure Container. Air-Gapped Ready.">
+<meta property="og:image" content="https://id-close.com/image/og-banner.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://id-close.com/">
+<meta name="twitter:title" content="ID-CLOSE VAULT">
+<meta name="twitter:description" content="Zero-Knowledge AES-256-GCM Secure Container. Air-Gapped Ready.">
+<meta name="twitter:image" content="https://id-close.com/image/og-banner.png">
+
+<meta name="theme-color" content="#0a0a0a">
+<noscript>
+<style>
+body > *:not(#nojs-warn){display:none !important}
+body{background:#000}
+#nojs-warn{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#FF3B30;color:#fff;text-align:center;padding:24px;z-index:2147483647;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;overflow:auto}
+#nojs-warn-box{max-width:600px;background:rgba(0,0,0,.88);border:3px solid #fff;padding:32px 24px}
+#nojs-warn h1{font-size:1.25rem;font-weight:900;letter-spacing:.03em;line-height:1.35;margin:0 0 14px}
+#nojs-warn p{margin:0 0 12px;font-size:.9rem;line-height:1.6}
+#nojs-warn .nojs-addr{font-family:'Courier New',Consolas,monospace;font-size:.8rem;word-break:break-all;color:#FFD9D4;margin:0}
+</style>
+<div id="nojs-warn"><div id="nojs-warn-box">
+<h1>⚠️ WARNING: JAVASCRIPT IS REQUIRED ⚠️</h1>
+<p>ID-CLOSE VAULT is a client-side cryptographic engine. JavaScript must be enabled so the on-device encryption can run.</p>
+<p>If you reached this page from anywhere other than the official address, you are on a cloned or phishing site.</p>
+<p class="nojs-addr">Official Domain: https://id-close.com</p>
+</div></div>
+</noscript>
+<link rel="icon" type="image/png" href="/image/id-close.png">
+<link rel="shortcut icon" type="image/png" href="/image/id-close.png">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*,html,body,input,textarea,button,select,kbd,code,pre,span,div,p,h1,h2,h3,h4,h5,h6{font-family:'Inter',system-ui,-apple-system,'Segoe UI','Roboto','Helvetica Neue',Arial,sans-serif}
+input,textarea,button,select{font-family:inherit !important}
+input::placeholder,textarea::placeholder{font-family:inherit !important}
+:root{--black:#000000;--white:#ffffff;--gray:#222222;--gray2:#333333;--gray3:#666666;--gray4:#999999;--red:#FF3B30;--green:#00FF66;--mono:'Courier New',Consolas,monospace;--sans:Inter,Helvetica Neue,Helvetica,Arial,system-ui,sans-serif}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow:hidden}
+body{font-family:var(--sans);background:var(--black);color:var(--white);height:100vh;height:100dvh;overflow:hidden;overflow-x:hidden;line-height:1.5}
+::selection{background:var(--red);color:var(--white)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--gray)}
+
+.screen{display:none !important}.screen.active{display:flex !important;height:100vh;height:100dvh;overflow:hidden}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT — 100vh SCREEN SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+.page{width:100%;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 24px;box-sizing:border-box}
+.page-center{justify-content:center}
+.page-top{justify-content:flex-start;padding-top:48px}
+
+.max-w{width:100%;max-width:560px}
+
+/* ═══════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════ */
+.t-hero{font-size:clamp(2.5rem,6vw,4rem);font-weight:900;letter-spacing:-0.04em;line-height:0.92;text-transform:uppercase}
+.t-label{font-size:0.625rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--gray3)}
+.t-body{font-size:0.875rem;color:var(--gray4);line-height:1.6}
+.t-mono{font-family:var(--mono);font-size:0.75rem;letter-spacing:0.02em}
+.t-mono-sm{font-family:var(--mono);font-size:0.625rem;letter-spacing:0.02em;color:var(--gray3)}
+.t-red{color:var(--red)}
+.t-white{color:var(--white)}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════════════════════════ */
+.brand-heading{font-family:var(--sans);font-size:0.875rem;font-weight:700;letter-spacing:0.02em;line-height:1.4;color:var(--white);margin-bottom:16px}
+.brand-heading::after{content:'.';color:var(--red);margin-left:0.06em}
+.brand-wordmark{font-family:var(--sans);font-weight:700;letter-spacing:0.02em;color:var(--white);display:inline}
+.brand-wordmark::after{content:'.';color:var(--red);margin-left:0.06em}
+
+.divider{width:100%;height:1px;background:var(--gray);margin:24px 0}
+.divider-thin{width:100%;height:1px;background:var(--gray);margin:12px 0}
+
+.back-nav{display:inline-flex !important;align-items:center;gap:6px;background:transparent;border:1px solid var(--gray);color:var(--gray3);padding:6px 14px;font-family:var(--sans);font-size:0.6875rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;border-radius:0;margin-bottom:20px;align-self:flex-start;width:auto !important}
+.back-nav:hover{border-color:var(--white);color:var(--white)}
+
+.progress-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px}
+.progress-track{width:100%;height:4px;background:#1a1a1a;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--white);transition:width 0.4s ease;width:0%;border-radius:2px}
+.progress-stats{display:flex;justify-content:space-between;margin-top:8px}
+#progress-status{font-family:var(--mono);font-size:0.625rem;color:var(--gray4);margin-top:6px;min-height:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 24px;border:1px solid var(--gray);background:var(--white);color:var(--black);font-family:var(--sans);font-size:0.8125rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;transition:background 0.15s,color 0.15s;border-radius:0}
+.btn:hover{background:var(--red);color:var(--white);border-color:var(--red)}
+.btn:disabled{opacity:0.9 !important;cursor:wait !important;pointer-events:none !important;background:transparent !important;color:var(--white) !important;border-color:var(--white) !important}
+
+.btn-ghost{background:transparent;color:var(--gray3);border-color:var(--gray)}
+.btn-ghost:hover{color:var(--white);border-color:var(--white);background:transparent}
+
+.input{width:100%;padding:9px 14px;background:transparent;border:1px solid var(--gray);color:var(--white);font-family:var(--sans);font-size:0.8125rem;outline:none;border-radius:0;transition:border-color 0.15s}
+.input:focus{border-color:var(--white)}
+.input::placeholder{color:var(--gray3);font-size:0.625rem;letter-spacing:0.02em}
+.input-mono{font-family:var(--mono);font-size:0.6875rem}
+
+.key-box{position:relative;border:1px solid var(--gray);padding:20px;width:100%;margin-bottom:20px}
+.key-box .t-label{margin-bottom:12px;display:block}
+.key-hex{font-family:var(--mono);font-size:0.6875rem;color:var(--white);word-break:break-all;line-height:1.8;user-select:all;max-height:100px;overflow-y:auto}
+.copy-trigger{position:absolute;top:16px;right:16px;background:transparent;border:1px solid var(--gray);color:var(--gray3);padding:4px 10px;font-family:var(--sans);font-size:0.5625rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;border-radius:0}
+.copy-trigger:hover{border-color:var(--white);color:var(--white)}
+.copy-trigger.done{border-color:#00FF66 !important;color:#00FF66 !important}
+
+.warn{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid var(--gray);width:100%;margin-bottom:24px}
+.warn .t-body{margin:0}
+
+/* Inline Error Messages */
+#volume-a-error, #volume-b-error, #unlock-home-error, #vault-error, #create-error, .field-error {
+  font-family: monospace, "Courier New", Courier !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px !important;
+  line-height: 1.2 !important;
+  color: #ff4444 !important;
+  margin: 6px 0 16px 0 !important;
+  padding: 0 !important;
+  display: none;
+  text-align: left;
+}
+
+/* File Drop Zone */
+.drop-zone{border:1px dashed var(--gray3);padding:20px 16px;text-align:center;cursor:pointer;transition:border-color .15s;user-select:none}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--white)}
+.drop-zone p{font-size:.75rem;color:var(--gray4)}
+.drop-zone strong{color:var(--white)}
+.drop-zone .file-list{margin-top:8px;text-align:left;max-height:80px;overflow-y:auto}
+.drop-zone .file-item{position:relative;display:flex;align-items:center;justify-content:space-between;width:100%;box-sizing:border-box;background:#111111;border:1px solid #222222;border-radius:4px;padding:10px 14px;margin-top:10px;font-family:var(--mono);font-size:0.625rem;color:var(--gray4)}
+.drop-zone .file-item:last-child{border-bottom:none}
+.file-remove-btn{display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:#888888;border:1px solid #333333;background:transparent;padding:4px 10px;border-radius:3px;cursor:pointer;font-family:var(--sans);transition:all 0.2s ease}
+.file-remove-btn:hover{color:#ff5555;border-color:#ff5555}
+
+.file-input-hidden{display:none}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITY CLASSES — Inline Style Consolidation
+   ═══════════════════════════════════════════════════════════════ */
+.mb-0{margin-bottom:0}.mb-0_5{margin-bottom:2px}.mb-1{margin-bottom:4px}.mb-1_5{margin-bottom:6px}.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}
+.mt-0{margin-top:0}.mt-1{margin-top:4px}.mt-1_5{margin-top:6px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}
+.pt-0{padding-top:0}.pb-0{padding-bottom:0}
+.text-xs{font-size:0.56rem}.text-sm{font-size:0.65rem}.text-base{font-size:0.75rem}
+.line-tight{line-height:1.2}.line-snug{line-height:1.3}.line-normal{line-height:1.35}
+.no-resize{resize:none;min-height:52px}
+.max-w-narrow{width:100%;max-width:520px}
+.no-underline{text-decoration:none}
+.hidden{display:none}
+.page-stretch{flex:1;min-height:0}
+.label-red{color:var(--red)}
+.text-white{color:#ffffff}.text-muted{color:#bbbbbb}.text-muted2{color:var(--gray3)}
+
+/* Reusable component modifiers */
+.label-block{display:block}
+.input-compact{padding:7px 12px;font-size:0.75rem}
+.btn-compact{padding:10px;font-size:0.75rem}
+.btn-compact-ghost{margin-top:16px;padding:9px;font-size:0.75rem}
+.btn-close-overlay{margin-top:12px;display:none;padding:8px;font-size:0.7rem}
+.drop-zone-compact{padding:14px 12px;margin-bottom:4px}
+.drop-zone-step{padding:16px 12px;margin-bottom:4px}
+.hero-sm{font-size:clamp(1.4rem,3.5vw,2.2rem);line-height:0.95}
+.hero-brand{font-size:clamp(28px,3.2vw,36px);font-weight:800;letter-spacing:-0.5px;line-height:0.95}
+.subtitle{margin-top:8px;font-size:13px;color:#888888}
+.hero-xs{font-size:clamp(1.2rem,3vw,2rem);margin-bottom:12px}
+.section-stack{display:flex;flex-direction:column;gap:20px}
+.stack-center{justify-content:center}
+.max-w-sub{max-width:360px}
+.divider-tight{margin:4px 0}
+.meta-gap{margin-top:4px;margin-bottom:6px}
+.textarea-mono{font-family:var(--mono);font-size:0.6875rem;padding:7px 12px}
+.mb-2_5{margin-bottom:10px}
+.mt-2{margin-top:8px}
+.flex-on{display:flex}
+.extracted-hidden{display:none;margin-top:16px}
+.link-pad{padding:6px 16px}
+.field-gap{margin-top:16px}
+.unlock-overlay{display:none;position:fixed;inset:0;z-index:99998;background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;flex-direction:column;align-items:center;justify-content:center}
+.unlock-shell{width:100%;max-width:400px;padding:24px;background:#0a0a0a;border:1px solid var(--gray)}
+.xmr-amount-row{display:flex;justify-content:center;margin:12px 0 10px 0}
+.xmr-amount-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,68,0,0.35);background:rgba(255,68,0,0.04);padding:5px 14px;border-radius:3px;font-family:monospace}
+.xmr-amount-label{color:#888;font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
+.xmr-amount-value{color:#ff4400;font-weight:bold;font-size:14px;letter-spacing:0.5px}
+.wizard-section-gap{margin-top:16px}
+.wizard-desc{font-family:var(--mono);font-size:0.5625rem;color:#888;margin-bottom:10px;line-height:1.5}
+.wizard-center{text-align:center;margin-top:12px}
+.footer-copyright{color:#888888;margin-bottom:3px}
+.footer-terms-link{color:#ff4444;text-decoration:none;font-weight:bold;margin-left:6px;pointer-events:auto}
+.footer-domain-row{color:#aaaaaa;font-weight:500}
+.footer-domain-link{color:#55aa55;background:#111111;padding:2px 6px;border-radius:4px;font-family:'Courier New',Consolas,monospace;font-size:0.625rem;letter-spacing:0.02em;pointer-events:auto;text-decoration:none}
+.donate-desc{font-size:0.75rem}
+
+/* Status */
+.status{font-family:var(--mono);font-size:.6875rem;min-height:18px;margin-top:8px}
+.status.ok{color:var(--green)}
+.status.err{color:var(--red)}
+.status.info{color:var(--gray4)}
+
+/* Frame */
+.frame{border:1px solid var(--gray);padding:20px;width:100%}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green);color:var(--green);padding:6px 14px;font-size:.6875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;width:auto;align-self:flex-start}
+.badge .dot{width:6px;height:6px;background:var(--green)}
+
+/* Link Box */
+.link-box{font-family:var(--mono);font-size:.6875rem;color:var(--white);word-break:break-all;line-height:1.8;user-select:all;border:1px dashed var(--gray);padding:14px;margin:12px 0;max-height:140px;overflow-y:auto}
+
+/* Size Selector */
+.size-selector{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.size-selector .input{width:auto;min-width:120px;text-align:right}
+.size-selector label{font-family:var(--mono);font-size:.6875rem;color:var(--gray4)}
+
+/* Number input spinner fix */
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+
+/* Preview */
+.preview-wrap{margin-top:12px}
+.preview-wrap .t-label{margin-bottom:8px;display:block}
+.preview-meta{font-family:var(--mono);font-size:.6875rem;color:var(--gray4);margin-top:8px;word-break:break-all}
+.preview-text{display:none;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto;border:1px solid var(--gray);padding:12px;margin-top:8px;font-size:0.6875rem}
+.preview-image{display:none;max-width:100%;margin-top:8px;border:1px solid var(--gray)}
+
+/* Vault File Card */
+.vault-file-card{background:#111111;border:1px solid #222222;border-radius:4px;padding:10px 14px;margin-top:10px;display:flex;align-items:center;justify-content:space-between}
+.vault-file-card-name{font-family:var(--mono);font-size:0.625rem;color:var(--gray4)}
+.vault-file-remove-btn{display:inline-flex;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;color:#888888;border:1px solid #333333;background:transparent;padding:4px 10px;border-radius:3px;cursor:pointer;font-family:var(--sans);transition:all 0.2s ease}
+.vault-file-remove-btn:hover{color:#ff5555;border-color:#ff5555}
+
+/* Button modifiers */
+.btn-save{width:auto;padding:6px 12px;font-size:0.625rem}
+
+/* Spinner animation */
+.spin-anim{animation:spin 1s linear infinite}
+
+/* Download item */
+.download-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--gray);margin-top:8px;font-family:var(--mono);font-size:0.625rem}
+.download-item .btn{width:auto;padding:6px 12px;font-size:0.625rem}
+
+/* Lock Action Bar */
+.lock-bar{display:none;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid var(--gray);margin-top:12px;font-family:var(--mono);font-size:0.625rem}
+.lock-bar.visible{display:flex}
+#inactivity-counter{color:var(--gray4);letter-spacing:0.04em}
+#btn-manual-lock{background:transparent;border:1px solid var(--gray);color:var(--gray3);padding:4px 12px;font-family:var(--sans);font-size:0.5625rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;border-radius:0}
+#btn-manual-lock:hover{border-color:var(--red);color:var(--red)}
+
+/* Version */
+.version{display:inline-block;vertical-align:baseline;margin-left:8px;font-family:var(--sans);font-size:12px;font-weight:500;color:rgba(255,255,255,0.45);line-height:1;white-space:nowrap;text-transform:lowercase}
+
+/* Section Cards */
+.section-card{border:1px solid var(--gray);padding:16px;margin-bottom:12px}
+.section-card h3{font-size:0.7rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--red);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--gray)}
+
+/* Particle Background */
+#particle-bg{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
+.top-nav{position:absolute;top:20px;right:20px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;z-index:2}
+.nav-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--gray);color:var(--gray3);padding:6px 14px;font-family:var(--sans);font-size:0.6875rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;border-radius:0;white-space:nowrap !important;flex-shrink:0}
+.nav-btn:hover{border-color:var(--white);color:var(--white)}
+
+@media(max-width:600px){.top-nav{top:12px;right:12px;left:12px;gap:6px;padding:0}.nav-btn{padding:5px 10px;font-size:0.625rem}}
+
+/* ═══════════════════════════════════════════════════════════════
+   INFO FRAMES (Subpages)
+   ═══════════════════════════════════════════════════════════════ */
+.info-frame{border:1px solid var(--gray);padding:24px 28px 20px;width:100%;max-width:560px}
+.info-frame p{font-size:0.8125rem;color:var(--gray4);line-height:1.7;margin-bottom:16px}
+.info-frame p:last-child{margin-bottom:0}
+.info-frame h3{font-size:0.875rem;font-weight:700;letter-spacing:0.02em;margin-bottom:16px;color:var(--white)}
+.xmr-addr{font-family:var(--mono);font-size:0.6875rem;color:var(--white);word-break:break-all;border:1px dashed var(--gray);padding:16px;margin-bottom:10px;line-height:1.8}
+#final-qr-img{width:160px !important;height:160px !important;margin-top:6px !important;margin-bottom:12px !important;align-self:center;display:block;border:1px solid var(--gray);border-radius:4px}
+.donation-center-stack{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;margin-top:16px}
+.donation-center-stack #copy-xmr-btn{align-self:center}
+#scr-about .back-nav,#scr-donate .back-nav,#scr-opsec .back-nav{align-self:start}
+#scr-about,#scr-donate,#scr-opsec{padding:0 !important}
+#scr-about .page,#scr-donate .page,#scr-opsec .page{justify-content:center !important;align-items:center !important;min-height:100vh !important;padding-top:0 !important;padding-bottom:0 !important}
+#scr-donate .info-frame{height:auto !important;min-height:unset !important}
+#scr-donate .info-frame button,#scr-donate .info-frame .nav-btn{align-self:center !important;margin:10px auto 0 auto !important}
+#copy-xmr-btn{border:1px solid #333333;color:#aaaaaa;background:transparent;font-family:var(--sans);font-size:0.6875rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.3s ease;padding:6px 14px;border-radius:0}
+#copy-xmr-btn:hover{border-color:#666666;color:#cccccc}
+#copy-xmr-btn.copied{border-color:#00ff66;color:#00ff66;box-shadow:0 0 12px rgba(0,255,102,0.3)}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCREEN 0: WELCOME — Compact 100vh, NO SCROLL
+   ═══════════════════════════════════════════════════════════════ */
+#scr-welcome{display:flex;flex-direction:column;justify-content:space-between;height:100vh;height:100dvh;padding:24px 20px 32px 20px;box-sizing:border-box;overflow:hidden !important}
+#scr-welcome .page{padding:0;min-height:auto;flex:1;display:flex;flex-direction:column;justify-content:center}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCREEN 1 & 2: STEP SCREENS — Compact 100vh, NO SCROLL
+   ═══════════════════════════════════════════════════════════════ */
+#scr-step-decoy,#scr-step-secret{display:flex;flex-direction:column;justify-content:center;height:100vh;height:100dvh;padding:20px;box-sizing:border-box;overflow:hidden !important}
+#scr-step-decoy .page,#scr-step-secret .page{padding:0;min-height:auto;flex:1;display:flex;flex-direction:column;justify-content:center}
+
+/* Footer */
+.site-footer{position:fixed;bottom:10px;left:0;width:100%;text-align:center;z-index:9999;background:transparent;font-family:'Courier New',Consolas,monospace;font-size:0.625rem;letter-spacing:0.02em;pointer-events:none}
+.site-footer>div:last-child{font-size:0 !important;display:flex !important;justify-content:center !important;align-items:center !important;text-align:center !important}
+.site-footer>div:last-child code{font-size:0.625rem !important;line-height:normal !important}
+
+.unlock-active .site-footer{display:none !important}
+
+@media(max-width:480px){
+  .site-footer{padding-top:8px !important;padding-bottom:8px !important}
+  .site-footer code{font-size:0.52rem !important;letter-spacing:-0.01em !important;line-height:1.3 !important;word-break:break-all !important;padding:0 4px !important}
+  .site-footer>div:last-child code{font-size:0.52rem !important}
+  #scr-welcome,#scr-step-decoy,#scr-step-secret{padding-bottom:10px !important}
+}
+
+@media(max-width:430px){
+  .page{padding:0 16px}
+  .page-top{padding-top:32px}
+  .btn{font-size:0.75rem;padding:10px 16px}
+  .input{font-size:0.75rem;padding:7px 12px}
+  .section-card{padding:12px}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRESET SELECTOR — Container Capacity Pills
+   ═══════════════════════════════════════════════════════════════ */
+.preset-selector{display:flex;gap:8px;width:100%;box-sizing:border-box;margin:12px 0}
+.preset-btn{
+  flex:1 1 0;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:10px 6px;
+  background:#0d0d0d;
+  border:1px solid #222222;
+  border-radius:4px;
+  color:#888888;
+  font-family:var(--sans);
+  font-size:0.6875rem;
+  font-weight:700;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  text-align:center;
+  white-space:nowrap;
+  line-height:1.4;
+}
+.preset-btn .preset-meta{
+  display:block;
+  font-family:var(--mono);
+  font-size:0.5625rem;
+  font-weight:500;
+  letter-spacing:0.02em;
+  color:#777777;
+  margin-top:2px;
+  text-transform:none;
+}
+.preset-btn.active{
+  background:#141414;
+  border:1px solid #ffffff !important;
+  color:#ffffff;
+}
+.preset-btn.active .preset-meta{color:#cccccc}
+.preset-btn:hover:not(.active){
+  border-color:#444444;
+  background:#111111;
+  color:#cccccc;
+}
+.preset-hint{
+  font-family:var(--mono);
+  font-size:0.5625rem;
+  color:#666666;
+  margin-bottom:4px;
+  line-height:1.4;
+}
+.preset-alloc{
+  font-family:var(--mono);
+  font-size:0.5625rem;
+  color:#888888;
+  margin-bottom:12px;
+  line-height:1.4;
+}
+@media(max-width:480px){
+  .preset-btn{padding:8px 4px;font-size:0.625rem}
+  .preset-btn .preset-meta{font-size:0.5rem}
+  .version{font-size:11px}
+}
+@media(max-width:360px){
+  .preset-selector{flex-direction:column;gap:8px}
+  .preset-btn{white-space:normal}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRO MODAL — Genesis Lifetime Pass
+   ═══════════════════════════════════════════════════════════════ */
+#proModal{display:none;position:fixed;inset:0;z-index:2147483647;background:transparent;align-items:center;justify-content:center;padding:20px}
+#proModal.open{display:flex}
+#proModal .modal-shell{position:relative;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;background:#0a0a0a;border:1px solid #333;padding:28px 24px 24px;box-sizing:border-box;will-change:transform;transform:translateZ(0)}
+#proModal .modal-shell::-webkit-scrollbar{width:4px}
+#proModal .modal-shell::-webkit-scrollbar-track{background:#0a0a0a}
+#proModal .modal-shell::-webkit-scrollbar-thumb{background:#333}
+
+/* Hide all page content behind the modal so nothing bleeds through the backdrop */
+body[data-pro-open]>.screen,
+body[data-pro-open]>.site-footer,
+body[data-pro-open]>#unlock-overlay{visibility:hidden;pointer-events:none}
+body[data-pro-open]>#particle-bg{visibility:visible !important;pointer-events:none}
+#proModal .modal-close{position:absolute;top:14px;right:14px;background:transparent;border:1px solid #333;color:#666;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--mono);font-size:14px;line-height:1;transition:all 0.15s}
+#proModal .modal-close:hover{border-color:#fff;color:#fff}
+#proModal .modal-qr{width:140px;height:140px;border:1px solid #333;border-radius:2px;display:block;margin:0 auto 12px;object-fit:contain;background:#111}
+
+/* PRO Badge in top nav */
+.pro-badge{display:none;align-items:center;gap:5px;border:1px solid var(--green);color:var(--green);padding:5px 10px;font-family:var(--mono);font-size:0.5625rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:default;white-space:nowrap}
+.pro-badge.visible{display:inline-flex}
+.pro-badge .pro-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:proPulse 2s infinite}
+@keyframes proPulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+@media(max-width:600px){
+  #proModal .modal-shell{padding:20px 16px 16px}
+  #proModal .modal-qr{width:120px;height:120px}
+}
+@media(max-width:430px){
+  #proModal .wizard-dl-link{text-align:center}
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE FIX — Small Viewport Footer & Scroll (iPhone SE)
+   ═══════════════════════════════════════════════════════════════ */
+@media(max-height:750px),(max-width:600px){
+  html,body{
+    overflow-y:auto !important;
+    height:auto !important;
+    min-height:100vh !important;
+    min-height:100dvh !important;
+  }
+
+  .screen.active{
+    height:auto !important;
+    min-height:100vh !important;
+    min-height:100dvh !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch;
+    display:flex !important;
+    flex-direction:column;
+  }
+
+  #scr-welcome,#scr-step-decoy,#scr-step-secret{
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .site-footer{
+    position:relative !important;
+    bottom:auto !important;
+    left:auto !important;
+    margin-top:25px !important;
+    padding-bottom:15px !important;
+    flex-shrink:0;
+  }
+
+  #scr-step-secret .page{
+    padding-bottom:50px !important;
+    min-height:auto !important;
+  }
+
+  #scr-about .page,#scr-donate .page,#scr-opsec .page{
+    justify-content:flex-start !important;
+    align-items:stretch !important;
+    padding-top:40px !important;
+    padding-bottom:50px !important;
+    min-height:auto !important;
+  }
+
+  #generate-vault-btn{
+    margin-bottom:20px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRO WIZARD — Multi-Step Flow
+   ═══════════════════════════════════════════════════════════════ */
+.wizard-step{display:none}
+.wizard-step.active{display:block}
+
+.wizard-title{font-family:var(--mono);font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#fff;margin-bottom:4px;padding-right:36px}
+.wizard-subtitle{font-family:var(--mono);font-size:0.625rem;color:#888;margin-bottom:20px;line-height:1.5}
+
+.wizard-card{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:18px 16px;margin-bottom:10px;
+  background:#0d0d0d;border:1px solid #222;cursor:pointer;transition:all 0.2s;
+  text-align:center;
+}
+.wizard-card:hover{border-color:#fff;background:#141414}
+.wizard-card .wizard-card-title{
+  font-family:var(--mono);font-size:0.6875rem;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;color:#fff;margin-bottom:4px;
+}
+.wizard-card .wizard-card-meta{
+  font-family:var(--mono);font-size:0.5625rem;color:#888;line-height:1.4;
+}
+
+.wizard-section{border:1px solid #222;padding:16px;margin-bottom:12px}
+.wizard-section h4{font-family:var(--mono);font-size:0.625rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #222}
+
+.wizard-addr-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.wizard-addr{flex:1;font-family:var(--mono);font-size:0.5625rem;color:#ccc;word-break:break-all;line-height:1.6;border:1px dashed #333;padding:8px 10px;background:#0d0d0d}
+.wizard-copy-btn{flex-shrink:0;background:transparent;border:1px solid #333;color:#888;padding:6px 12px;font-family:var(--mono);font-size:0.5625rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.wizard-copy-btn:hover{border-color:#fff;color:#fff}
+.wizard-copy-btn.copied{border-color:var(--green);color:var(--green)}
+
+.wizard-footnote{font-family:var(--mono);font-size:0.5625rem;color:#666;line-height:1.5;margin-top:12px}
+
+.wizard-input{width:100%;padding:10px 12px;background:#0d0d0d;border:1px solid #333;color:#fff;font-family:var(--mono);font-size:0.6875rem;outline:none;margin-bottom:8px;box-sizing:border-box;transition:border-color 0.15s}
+.wizard-input:focus{border-color:#fff}
+.wizard-input::placeholder{color:#555;font-size:0.625rem}
+
+.wizard-input-label{font-family:var(--mono);font-size:0.5625rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#888;margin-bottom:4px;display:block}
+
+.wizard-action-btn{width:100%;padding:10px;border:1px solid #fff;background:#fff;color:#000;font-family:var(--mono);font-size:0.6875rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.15s}
+.wizard-action-btn:hover{background:var(--red);border-color:var(--red);color:#fff}
+.wizard-action-btn:disabled{opacity:0.5;cursor:wait;pointer-events:none}
+
+.wizard-ghost-btn{width:100%;padding:10px;border:1px solid #333;background:transparent;color:#888;font-family:var(--mono);font-size:0.6875rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;margin-top:10px}
+.wizard-ghost-btn:hover{border-color:#fff;color:#fff}
+
+.wizard-activate-status{font-family:var(--mono);font-size:0.625rem;min-height:16px;margin-top:8px;line-height:1.4}
+.wizard-activate-status.ok{color:var(--green)}
+.wizard-activate-status.err{color:var(--red)}
+
+.wizard-session-id{flex:1;font-family:var(--mono);font-size:0.5625rem;color:var(--green);word-break:break-all;line-height:1.6;border:1px dashed #333;padding:8px 10px;background:#0d0d0d}
+.wizard-dl-link{font-family:var(--mono);font-size:0.5625rem;color:#aaa;text-decoration:none;border:1px solid #333;padding:5px 10px;transition:all 0.15s;display:inline-block}
+.wizard-dl-link:hover{border-color:#fff;color:#fff}
+
+@media(max-width:600px){
+  #proModal .wizard-title{font-size:0.6875rem}
+  .wizard-card{padding:14px 12px}
+}
+
+.site-footer a:hover{color:#ff6666;text-decoration:underline}
+
+</style>
+</head>
+<body>
+
+<canvas id="particle-bg"></canvas>
+
+
+<!-- ═══════════ SCREEN 0: WELCOME / MAIN ═══════════ -->
+<div id="scr-welcome" class="screen active">
+  
+  <div class="top-nav">
+    <button class="nav-btn" data-nav="scr-about">ABOUT</button>
+    <button class="nav-btn" id="btn-opsec" data-nav="scr-opsec">OPSEC</button>
+    <button class="nav-btn" data-nav="scr-donate">DONATE</button>
+    <a class="nav-btn no-underline" href="whitepaper.pdf" target="_blank" rel="noopener noreferrer">WHITEPAPER</a>
+    <a class="nav-btn no-underline" href="/canary.txt" target="_blank" rel="noopener noreferrer">CANARY</a>
+    <a class="nav-btn no-underline" href="/pgp-key.txt" target="_blank" rel="noopener noreferrer">PGP KEY</a>
+    <span class="pro-badge" id="pro-status-badge"><span class="pro-dot"></span><span id="pro-badge-text">PRO ACTIVE</span></span>
+  </div>
+
+  <div class="page page-center">
+    <div class="max-w max-w-narrow section-stack stack-center">
+      
+      <div class="mb-3">
+        <h1 class="t-hero hero-brand">
+          ID-CLOSE VAULT<span class="t-red">.</span><span class="version">v1.0.0</span>
+        </h1>
+        <p class="subtitle line-snug max-w-sub">Zero-Knowledge AES-256-GCM Secure Container. Air-Gapped Ready.</p>
+      </div>
+
+      <!-- CREATE VAULT CTA -->
+      <div class="mb-2">
+        <button class="btn btn-compact" id="btn-create-vault">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>
+          CREATE NEW VAULT
+        </button>
+        <p class="t-mono-sm mt-1 text-xs line-tight">Generate a zero-knowledge partitioned cryptographic container.</p>
+      </div>
+
+      <div class="divider-thin divider-tight"></div>
+
+      <!-- UNLOCK SECTION -->
+      <div>
+        <label class="t-label mb-1 text-xs label-block">Vault File (.bin)</label>
+        <div class="drop-zone drop-zone-compact" id="vault-drop-zone" role="button" tabindex="0" aria-label="Select vault file">
+          <p><strong>DRAG &amp; DROP VAULT FILE</strong><br><span class="text-sm">or click to browse</span></p>
+        </div>
+        <input type="file" class="file-input-hidden" id="vault-file-input" accept=".bin">
+        <p class="t-mono-sm mt-1 mb-1_5" id="vault-file-meta"></p>
+        <div id="vault-error"></div>
+
+        <label class="t-label mb-1 mt-4 text-xs label-block">Password</label>
+        <input type="password" class="input mb-0 input-compact" id="unlock-password" placeholder="Primary or Secondary passphrase" autocomplete="off" spellcheck="false">
+
+        <button class="btn btn-ghost btn-compact-ghost" id="unlock-vault-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          DECRYPT &amp; OPEN VAULT
+        </button>
+        <div id="unlock-home-error"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SCREEN 1: STEP 01 — DECOY SECTOR ═══════════ -->
+<div id="scr-step-decoy" class="screen">
+  <div class="page page-center page-stretch">
+    <div class="max-w max-w-narrow">
+      <button class="back-nav" data-nav="scr-welcome">&#8592; Back</button>
+
+      <div class="mb-3">
+        <p class="t-label label-red mb-1 text-xs">01 — Primary Partition (Standard)</p>
+        <h1 class="t-hero hero-sm">VOLUME<span class="t-red">.</span><br>A<span class="t-red">.</span></h1>
+        <p class="t-body mt-1_5 text-base line-snug">Standard-access partition. Encrypted with the Primary Passphrase.</p>
+      </div>
+
+      <label class="t-label mb-1 text-xs label-block">Primary Passphrase</label>
+      <input type="password" class="input mb-0 input-compact" id="decoy-password" placeholder="Enter primary passphrase" autocomplete="off" spellcheck="false">
+      <div id="volume-a-error"></div>
+
+      <label class="t-label mb-1 mt-4 text-xs label-block">Primary Files</label>
+      <div class="drop-zone drop-zone-step" id="decoy-drop-zone" role="button" tabindex="0" aria-label="Select primary partition files">
+        <p><strong>DRAG &amp; DROP FILES HERE</strong><br><span class="text-sm">or click to browse</span></p>
+        <div class="file-list" id="decoy-file-list"></div>
+      </div>
+      <input type="file" class="file-input-hidden" id="decoy-file-input" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.doc,.docx,.zip,.7z,.tar,.gpg">
+      <p class="t-mono-sm meta-gap" id="decoy-file-meta"></p>
+
+      <label class="t-label mb-1 text-xs label-block">Primary Text / Notes</label>
+      <textarea class="input no-resize textarea-mono mb-2_5" id="decoy-text" placeholder="Optional: credentials, notes, etc." rows="3"></textarea>
+
+      <button class="btn btn-compact" id="btn-to-step2">
+        CONTINUE TO SECONDARY PARTITION &#8594;
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SCREEN 2: STEP 02 — HIDDEN SECTOR & GENERATE ═══════════ -->
+<div id="scr-step-secret" class="screen">
+  <div class="page page-center page-stretch">
+    <div class="max-w max-w-narrow">
+      <button class="back-nav" data-nav="scr-step-decoy">&#8592; Back</button>
+
+      <div class="mb-3">
+        <p class="t-label label-red mb-1 text-xs">02 — Secondary Partition (Extended)</p>
+        <h1 class="t-hero hero-sm">VOLUME<span class="t-red">.</span><br>B<span class="t-red">.</span></h1>
+        <p class="t-body mt-1_5 text-base line-snug">Extended-access partition. Cryptographically isolated from Volume A.</p>
+      </div>
+
+      <label class="t-label mb-1 text-xs label-block">Secondary Passphrase</label>
+      <input type="password" class="input mb-0 input-compact" id="master-password" placeholder="Enter secondary passphrase" autocomplete="off" spellcheck="false">
+      <div id="volume-b-error"></div>
+
+      <label class="t-label mb-1 mt-4 text-xs label-block">Secondary Files</label>
+      <div class="drop-zone drop-zone-step" id="hidden-drop-zone" role="button" tabindex="0" aria-label="Select secondary partition files">
+        <p><strong>DRAG &amp; DROP FILES HERE</strong><br><span class="text-sm">or click to browse</span></p>
+        <div class="file-list" id="hidden-file-list"></div>
+      </div>
+      <input type="file" class="file-input-hidden" id="hidden-file-input" multiple>
+      <p class="t-mono-sm mt-1 mb-1_5" id="hidden-file-meta"></p>
+
+      <label class="t-label mb-1 text-xs label-block">Secondary Text / Seeds</label>
+      <textarea class="input no-resize textarea-mono mb-2" id="hidden-text" placeholder="Optional: crypto seeds, private keys, credentials" rows="3"></textarea>
+
+      <!-- Container Size Presets -->
+      <label class="t-label mb-1_5 text-xs label-block">Container Capacity</label>
+      <div class="preset-selector" id="preset-selector">
+        <button class="preset-btn active" data-size="10" type="button">Compact<br><span class="preset-meta">10 MB</span></button>
+        <button class="preset-btn" data-size="50" type="button">Standard<br><span class="preset-meta">50 MB</span></button>
+        <button class="preset-btn" data-size="100" type="button">Vault Pro<br><span class="preset-meta">100 MB</span></button>
+      </div>
+      <p class="preset-hint" id="preset-hint">Recommended for Seed Phrases, PGP Keys, Passwords.</p>
+      <p class="preset-alloc" id="preset-alloc">Allocation: 5 MB Volume A / 5 MB Volume B</p>
+      <input type="hidden" id="container-size" value="10">
+      <input type="hidden" id="auto-pad" value="false">
+
+      <div class="progress-row hidden" id="create-progress-row">
+        <span class="t-label">Building</span>
+        <span class="t-mono" id="create-pct">0%</span>
+      </div>
+      <div class="progress-track hidden" id="create-progress-track"><div class="progress-fill" id="create-pct-bar"></div></div>
+      <div id="progress-status"></div>
+
+      <button class="btn btn-compact" id="generate-vault-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>
+        GENERATE VAULT
+      </button>
+      <div id="create-error"></div>
+
+      <div id="download-actions" class="hidden mt-3">
+        <button class="btn btn-compact" id="btn-download-bin">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Download Container (.bin)
+        </button>
+      </div>
+
+      <div class="status" id="create-status" aria-live="polite"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SCREEN: ABOUT ═══════════ -->
+<div id="scr-about" class="screen">
+  <div class="page page-center">
+    <div class="max-w section-stack">
+      <button class="back-nav" data-nav="scr-welcome">&#8592; Back</button>
+      <div class="info-frame">
+        <h3 class="brand-heading">ABOUT</h3>
+        <p><strong>ID-CLOSE VAULT</strong> is an air-gapped, zero-knowledge cryptographic container engine engineered against hostile forensic inspection.</p>
+        <p>Containers exported as .bin possess zero metadata, zero magic bytes, and zero partition headers. Engineered for maximum Shannon entropy (~8.0 bits/byte), containers are mathematically indistinguishable from uniform CSPRNG noise.</p>
+        <p>Two cryptographically isolated partitions — Volume A (Decoy) and Volume B (Hidden) — coexist within a single fixed-size binary block. Authenticated via AES-256-GCM and HKDF tier-binding, proving the existence of Volume B is mathematically impossible.</p>
+        <p>All operations execute strictly inside volatile client memory via native Web Crypto APIs (NIST SP 800-38D, RFC 8032). Zero server roundtrips, zero telemetry, and zero persistent storage of vault data.</p>
+        <p>Official domain: <span class="text-white">https://id-close.com</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SCREEN: OPSEC ADVISORY ═══════════ -->
+<div id="scr-opsec" class="screen">
+  <div class="page page-center">
+    <div class="max-w section-stack">
+      <button class="back-nav" data-nav="scr-welcome">&#8592; Back</button>
+      <div class="info-frame">
+        <h3 class="brand-heading">OPSEC</h3>
+        <p><strong>1. Air-Gapped Isolation.</strong> Load vault, then disconnect all network interfaces (Wi-Fi, Ethernet, Bluetooth). For maximum operational security, execute exclusively within amnesic systems such as Tails OS or Qubes OS.</p>
+        <p><strong>2. Plausible Deniability Handling.</strong> Maintain plausible, non-sensitive data in Volume A (Decoy). Under duress, disclose only Decoy credentials. Volume B remains cryptographically invisible and unfalsifiable.</p>
+        <p><strong>3. Storage Discretion.</strong> Store containers under neutral filenames (<code>system.dat</code>, <code>backup.iso</code>) on full-disk encrypted media (LUKS, BitLocker). Never synchronize container files to cloud services.</p>
+        <p><strong>4. Memory Zeroization & Purge.</strong> An automated 5-minute timer purges volatile memory. Use <strong>LOCK & PURGE</strong> to immediately zeroize all RAM buffers via DoD 5220.22-M principles. Power off host machine to defeat cold-boot forensics.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SCREEN: DONATE ═══════════ -->
+<div id="scr-donate" class="screen">
+  <div class="page page-center">
+    <div class="max-w section-stack">
+      <button class="back-nav" data-nav="scr-welcome">&#8592; Back</button>
+      <div class="info-frame">
+        <h3 class="brand-heading">DONATE</h3>
+        <p class="t-body text-muted">Support <span class="brand-wordmark">ID-CLOSE VAULT</span> With Monero (XMR)</p>
+        <p class="text-muted2 donate-desc">Monero is built for absolute financial privacy. If you value what ID-CLOSE VAULT provides, consider supporting its independent development.</p>
+        <div class="xmr-addr" id="xmr-addr">85s9NJXcppvHDJECVmSetshNRMFHAzQDRgmrzGuinVnA4goe6fSjmqqPPcCXUa8DcCEfy1on7Ek63JNDswufVBahArMJjTu</div>
+        <div class="donation-center-stack">
+          <img src="/image/xmr-qr.png" alt="Monero QR Code" id="final-qr-img">
+          <button id="copy-xmr-btn" class="back-nav">COPY ADDRESS</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Unlock progress + extracted (used when unlocking from Screen 0) -->
+<div id="unlock-overlay" class="unlock-overlay">
+  <div class="max-w unlock-shell">
+    <h2 class="t-hero hero-xs">UNLOCKING<span class="t-red">.</span></h2>
+    <div class="progress-row flex-on" id="unlock-progress-row">
+      <span class="t-label">Decrypting</span>
+      <span class="t-mono" id="unlock-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="unlock-pct-bar"></div></div>
+    <div class="status mt-2" id="unlock-status" aria-live="polite"></div>
+
+    <div class="lock-bar" id="lock-bar">
+      <span id="inactivity-counter">Auto-lock: 05:00</span>
+      <button id="btn-manual-lock">Lock &amp; Purge</button>
+    </div>
+
+    <div class="section-card extracted-hidden" id="extracted-section">
+      <h3>EXTRACTED CONTENTS</h3>
+      <div id="extracted-files"></div>
+    </div>
+    <button class="btn btn-ghost btn-close-overlay" id="unlock-close-btn">CLOSE</button>
+  </div>
+</div>
+
+<!-- ═══════════ PRO MODAL — Multi-Step Wizard ═══════════ -->
+<div id="proModal">
+  <div class="modal-shell">
+    <button class="modal-close" id="proModal-close" aria-label="Close">&times;</button>
+
+    <!-- ────── STEP 0: Access Selection ────── -->
+    <div class="wizard-step active" data-step="0">
+      <button class="back-nav" id="wiz-close">&larr; BACK</button>
+
+      <h2 class="wizard-title">PRO CAPACITY ACCESS (100 MB)</h2>
+      <p class="wizard-subtitle">Choose how you want to unlock 100 MB capacity.</p>
+
+      <div class="wizard-card" id="wiz-step1a-trigger">
+        <div class="wizard-card-title">ACTIVATE EXISTING LICENSE</div>
+        <div class="wizard-card-meta">Paste your signed token to unlock Pro capacity.</div>
+      </div>
+
+      <div class="wizard-card" id="wiz-step1b-trigger">
+        <div class="wizard-card-title">ACQUIRE GENESIS PASS (0.08 XMR)</div>
+        <div class="wizard-card-meta">One-time Monero payment. Lifetime ownership.</div>
+      </div>
+    </div>
+
+    <!-- ────── STEP 1A: Direct License Activation ────── -->
+    <div class="wizard-step" data-step="1a">
+      <button class="back-nav" id="wiz-back-1a">&larr; BACK</button>
+
+      <h2 class="wizard-title">ENTER PRO LICENSE</h2>
+      <p class="wizard-subtitle">Paste your signed token to unlock 100 MB capacity.</p>
+
+      <label class="wizard-input-label">LICENSE TOKEN</label>
+      <input type="text" class="wizard-input" id="wiz-license-input" placeholder="Enter your license token..." autocomplete="off" spellcheck="false" />
+      <button class="wizard-action-btn" id="wiz-btn-activate">VERIFY &amp; ACTIVATE PRO</button>
+      <div class="wizard-activate-status" id="wiz-license-status"></div>
+    </div>
+
+    <!-- ────── STEP 1B: Monero Payment ────── -->
+    <div class="wizard-step" data-step="1b">
+      <button class="back-nav" id="wiz-back-1b">&larr; BACK</button>
+
+      <h2 class="wizard-title">STEP 01 &mdash; MONERO SETTLEMENT</h2>
+      <p class="wizard-subtitle">Send exactly 0.08 XMR to the address below.</p>
+
+      <div class="wizard-section">
+        <h4>MONERO PAYMENT</h4>
+        <img src="image/xmr-qr.png" alt="XMR QR" class="modal-qr" />
+        <div class="xmr-amount-row">
+          <div class="xmr-amount-badge">
+            <span class="xmr-amount-label">Amount:</span>
+            <span class="xmr-amount-value">0.08 XMR</span>
+          </div>
+        </div>
+        <div class="wizard-addr-row">
+          <div class="wizard-addr" id="wiz-xmr-addr">85s9NJXcppvHDJECVmSetshNRMFHAzQDRgmrzGuinVnA4goe6fSjmqqPPcCXUa8DcCEfy1on7Ek63JNDswufVBahArMJjTu</div>
+          <button class="wizard-copy-btn" id="wiz-copy-xmr">COPY</button>
+        </div>
+      </div>
+
+      <button class="wizard-action-btn" id="wiz-to-step2b">I HAVE COMPLETED PAYMENT &rarr;</button>
+    </div>
+
+    <!-- ────── STEP 2B: Session Dispatch & Attribution ────── -->
+    <div class="wizard-step" data-step="2b">
+      <button class="back-nav" id="wiz-back-2b">&larr; BACK TO PAYMENT</button>
+
+      <h2 class="wizard-title">STEP 02 &mdash; DISPATCH TO SESSION</h2>
+      <p class="wizard-subtitle">Provide your details so we can send your license token via Session.</p>
+
+      <label class="wizard-input-label">DESIRED ALIAS (REQUIRED)</label>
+      <input type="text" class="wizard-input" id="wiz-alias" placeholder="Your alias..." autocomplete="off" spellcheck="false" />
+
+      <label class="wizard-input-label">TRANSACTION HASH / PROOF (REQUIRED)</label>
+      <input type="text" class="wizard-input" id="wiz-txhash" placeholder="Paste your Monero tx hash or proof..." autocomplete="off" spellcheck="false" />
+
+      <label class="wizard-input-label">REFERRAL / PROMO CODE (OPTIONAL)</label>
+      <input type="text" class="wizard-input" id="wiz-promo" placeholder="Enter promo code or leave blank..." autocomplete="off" spellcheck="false" />
+
+      <button class="wizard-action-btn" id="wiz-copy-dispatch">COPY DISPATCH TO CLIPBOARD</button>
+      <div class="wizard-activate-status" id="wiz-dispatch-status"></div>
+
+      <div class="wizard-section wizard-section-gap">
+        <h4>SESSION MESSENGER</h4>
+        <p class="wizard-desc">Send the dispatch above to our Session ID. Your license token will be sent back to you.</p>
+        <div class="wizard-addr-row">
+          <div class="wizard-session-id" id="wiz-session-id">055126ed67a342508960e76839573aa1c798d748ad37aceec1f8f2266871491a7e</div>
+          <button class="wizard-copy-btn" id="wiz-copy-session">COPY ID</button>
+        </div>
+        <div class="wizard-center">
+          <a class="wizard-dl-link link-pad" href="https://getsession.org/download" target="_blank" rel="noopener noreferrer">[ Download Session ]</a>
+        </div>
+      </div>
+
+      <p class="wizard-footnote">Your license token will be verified and sent back via Session to activate under Step 1A (Activate Existing License).</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
+}
+if ('caches' in window) {
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+}
+</script>
+<script type="module" src="/js/vault-ui.js"></script>
+
+<footer class="site-footer">
+    <div class="footer-copyright">&copy; 2026 ID-CLOSE VAULT. ALL RIGHTS RESERVED. &bull; <a href="/terms.html" class="footer-terms-link">TERMS</a></div>
+    <div class="footer-domain-row">
+        OFFICIAL: <a href="https://id-close.com" target="_blank" rel="noopener noreferrer" class="footer-domain-link">id-close.com</a>
+    </div>
+</footer>
+</body>
+</html>

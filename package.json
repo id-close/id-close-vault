@@ -1,0 +1,14 @@
+{
+  "name": "id-close-vault",
+  "version": "1.0.0",
+  "description": "ID-CLOSE VAULT v1.0 — Zero-Knowledge Plausible Deniability Vault. Dual-Key Hidden Volumes via AES-256-GCM + PBKDF2. Headerless containers. Fully offline capable.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --check server.js && node --check public/js/vault.js && node --check public/js/vault-ui.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

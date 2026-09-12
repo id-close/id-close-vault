@@ -1,0 +1,45 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+======================================================================
+ID-CLOSE VAULT — WARRANT CANARY & INTEGRITY STATEMENT
+======================================================================
+
+1. ZERO-KNOWLEDGE & CRYPTOGRAPHIC ASSURANCE:
+- - ID-CLOSE Vault is an entirely client-side, zero-knowledge container system.
+- - All cryptographic operations (AES-256-GCM, HKDF-SHA256, Ed25519) execute
+  strictly inside the user's browser via native Web Crypto APIs.
+- - NO plaintext data, master keys, or passwords ever leave client memory.
+- - Server infrastructure is completely stateless: NO databases, NO telemetry,
+  NO IP access logs, and NO session metadata retention.
+
+2. FORMAL WARRANT CANARY DECLARATIONS:
+As of the statement date below, ID-CLOSE and its operators confirm:
+- - NO warrants, court orders, or subpoenas have been served.
+- - NO National Security Letters (NSLs) or gag orders have been received.
+- - NO requests for backdoors, weakened entropy, or key escrow have been made.
+- - NO private signing keys, source repositories, or infrastructure have been compromised.
+- - NO code modifications have been made to monitor, intercept, or log user operations.
+
+If this canary is not renewed within its validity period, or if signature
+verification fails, assume ID-CLOSE Vault integrity has been compromised.
+
+3. VERIFICATION & OPERATIONAL DETAILS:
+Official Domain     : https://id-close.com
+PGP Key Fingerprint : A019 5EA1 108D 251A A409  6A07 F9FB F2D9 4FE5 3E8B
+Statement Date      : 2026-09-12
+Canary Validity     : 30 Days (Valid until: 2026-10-12)
+Operational Status  : 100% OPERATIONAL, AUDITED & UNCOMPROMISED
+Compliance Standard : NIST SP 800-38D | RFC 5869 | RFC 8032 | DoD 5220.22-M
+
+4. PROOF OF FRESHNESS (MONERO ENTROPY WITNESS):
+- - Monero Block Height : 3760974
+- - Monero Block Hash   : c52041e00de2cef7e7e3930f6c4c44f4921f8392e1c50e4aa05b241fc26e968e
+======================================================================
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSgGV6hEI0lGqQJagf5+/LZT+U+iwUCaqWANAAKCRD5+/LZT+U+
+iz12AQCR+D0uX5qYVt+9aHxTLCSDBmxSOxPJzPN1d0s7TPkQzAEArrtuIfd8Td+1
+GhLAqsx1Ionkee2FnnA3n8bwzP+TRg8=
+=+RVZ
+-----END PGP SIGNATURE-----
