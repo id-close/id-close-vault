@@ -615,68 +615,196 @@ function updateTimerBadge() {
   badge.textContent = `Auto-lock: ${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
 }
 
+function u16(v) {
+  return [v & 0xff, (v >> 8) & 0xff];
+}
+function u32(v) {
+  return [v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >> 24) & 0xff];
+}
+function concat(arrays) {
+  let total = 0;
+  for (const a of arrays) total += a.length;
+  const out = new Uint8Array(total);
+  let off = 0;
+  for (const a of arrays) { out.set(a, off); off += a.length; }
+  return out;
+}
+
+const _crcTable = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c;
+  }
+  return t;
+})();
+
+function crc32(buf) {
+  let crc = 0xffffffff;
+  for (let i = 0; i < buf.length; i++) crc = _crcTable[(crc ^ buf[i]) & 0xff] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
+function makeZip(files) {
+  const localHeaders = [];
+  const centralHeaders = [];
+  const fileDataBlocks = [];
+  let offset = 0;
+
+  for (const file of files) {
+    const nameBytes = new TextEncoder().encode(file.name);
+    const dataBytes = file.data instanceof Uint8Array ? file.data : new Uint8Array(file.data);
+    const crc = crc32(dataBytes);
+    const modDate = 0x5821;
+    const modTime = 0x0000;
+
+    const localHeader = new Uint8Array([
+      0x50, 0x4b, 0x03, 0x04,
+      0x14, 0x00,
+      0x00, 0x00,
+      0x00, 0x00,
+      modTime & 0xff, (modTime >> 8) & 0xff,
+      modDate & 0xff, (modDate >> 8) & 0xff,
+      ...u32(crc),
+      ...u32(dataBytes.length),
+      ...u32(dataBytes.length),
+      ...u16(nameBytes.length),
+      0x00, 0x00
+    ]);
+    localHeaders.push(concat([localHeader, nameBytes]));
+    fileDataBlocks.push(dataBytes);
+
+    const centralHeader = new Uint8Array([
+      0x50, 0x4b, 0x01, 0x02,
+      0x14, 0x00,
+      0x14, 0x00,
+      0x00, 0x00,
+      0x00, 0x00,
+      modTime & 0xff, (modTime >> 8) & 0xff,
+      modDate & 0xff, (modDate >> 8) & 0xff,
+      ...u32(crc),
+      ...u32(dataBytes.length),
+      ...u32(dataBytes.length),
+      ...u16(nameBytes.length),
+      0x00, 0x00,
+      0x00, 0x00,
+      0x00, 0x00,
+      0x00, 0x00,
+      ...u32(offset)
+    ]);
+    centralHeaders.push(concat([centralHeader, nameBytes]));
+    offset += localHeader.length + nameBytes.length + dataBytes.length;
+  }
+
+  const cdOffset = offset;
+  let cdSize = 0;
+  for (const ch of centralHeaders) cdSize += ch.length;
+
+  const endRecord = new Uint8Array([
+    0x50, 0x4b, 0x05, 0x06,
+    0x00, 0x00,
+    0x00, 0x00,
+    ...u16(files.length),
+    ...u16(files.length),
+    ...u32(cdSize),
+    ...u32(cdOffset),
+    0x00, 0x00
+  ]);
+
+  return concat([...localHeaders, ...fileDataBlocks, ...centralHeaders, endRecord]);
+}
+
 function displayExtracted(payload) {
   const section = $("extracted-section");
   const container = $("extracted-files");
   container.innerHTML = "";
 
-  if (payload.files && payload.files.length > 0) {
-    payload.files.forEach(file => {
-      const item = document.createElement("div");
-      item.className = "download-item";
-      const blob = new Blob([file.data], { type: "application/octet-stream" });
-      const url = URL.createObjectURL(blob);
-      trackObjectURL(url);
-      trackTypedArray(file.data);
-      item.innerHTML = `
-        <span>${file.name} (${formatBytes(file.data.length)})</span>
-        <button class="btn btn-save">SAVE</button>
-      `;
-      item.querySelector("button").addEventListener("click", () => {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = file.name;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setStatus("unlock-status", `Saved ${file.name}`, "ok");
-      });
-      container.appendChild(item);
-    });
-  }
+  const files = payload.files || [];
+  const hasText = !!payload.text;
+  const needsZip = files.length > 1 || (files.length > 0 && hasText) || (files.length === 0 && hasText);
 
-  if (payload.text) {
-    const item = document.createElement("div");
-    item.className = "download-item";
-    const preview = payload.text.length > 100 ? payload.text.slice(0, 100) + "…" : payload.text;
-    const textBytes = new TextEncoder().encode(payload.text);
-    trackTypedArray(textBytes);
-    const blob = new Blob([payload.text], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    trackObjectURL(url);
-    item.innerHTML = `
-      <span>Text content: ${preview}</span>
-      <button class="btn btn-save">SAVE AS .txt</button>
-    `;
-    item.querySelector("button").addEventListener("click", () => {
+  if (needsZip) {
+    const zipEntries = [];
+    for (const file of files) {
+      trackTypedArray(file.data);
+      zipEntries.push({ name: file.name, data: new Uint8Array(file.data) });
+    }
+    if (hasText) {
+      const textBytes = new TextEncoder().encode(payload.text);
+      trackTypedArray(textBytes);
+      zipEntries.push({ name: "notes.txt", data: textBytes });
+    }
+    const zipBytes = makeZip(zipEntries);
+    const zipBlob = new Blob([zipBytes], { type: "application/zip" });
+    const zipUrl = URL.createObjectURL(zipBlob);
+    trackObjectURL(zipUrl);
+
+    const card = document.createElement("div");
+    card.className = "vault-file-card";
+    card.innerHTML =
+      `<span class="vault-file-card-name">vault-extracted.zip (${formatBytes(zipBytes.length)})</span>` +
+      `<button class="vault-file-remove-btn">SAVE</button>`;
+    card.querySelector("button").addEventListener("click", () => {
       const a = document.createElement("a");
-      a.href = url;
-      a.download = `extracted-${Date.now()}.txt`;
+      a.href = zipUrl;
+      a.download = "vault-extracted.zip";
       document.body.appendChild(a);
       a.click();
       a.remove();
-      setStatus("unlock-status", "Text saved", "ok");
+      setStatus("unlock-status", "Saved vault-extracted.zip", "ok");
     });
-    container.appendChild(item);
-  }
+    container.appendChild(card);
+  } else if (files.length === 1 && !hasText) {
+    const file = files[0];
+    trackTypedArray(file.data);
+    const blob = new Blob([file.data], { type: "application/octet-stream" });
+    const url = URL.createObjectURL(blob);
+    trackObjectURL(url);
 
-  if ((!payload.files || payload.files.length === 0) && !payload.text) {
+    const card = document.createElement("div");
+    card.className = "vault-file-card";
+    card.innerHTML =
+      `<span class="vault-file-card-name">${file.name} (${formatBytes(file.data.length)})</span>` +
+      `<button class="vault-file-remove-btn">SAVE</button>`;
+    card.querySelector("button").addEventListener("click", () => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setStatus("unlock-status", `Saved ${file.name}`, "ok");
+    });
+    container.appendChild(card);
+  } else if (hasText && files.length === 0) {
+    const textBytes = new TextEncoder().encode(payload.text);
+    trackTypedArray(textBytes);
+    const blob = new Blob([textBytes], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    trackObjectURL(url);
+
+    const card = document.createElement("div");
+    card.className = "vault-file-card";
+    card.innerHTML =
+      `<span class="vault-file-card-name">notes.txt (${formatBytes(textBytes.length)})</span>` +
+      `<button class="vault-file-remove-btn">SAVE</button>`;
+    card.querySelector("button").addEventListener("click", () => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "notes.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setStatus("unlock-status", "Saved notes.txt", "ok");
+    });
+    container.appendChild(card);
+  } else {
     container.innerHTML = `<p class="t-body text-muted2">No files or text in vault.</p>`;
   }
 
   section.classList.remove("extracted-hidden");
 
-  // Show lock bar and start inactivity timer
   const lockBar = $("lock-bar");
   if (lockBar) lockBar.classList.add("visible");
   startInactivityTimer();
@@ -749,7 +877,7 @@ function initCopyXMR() {
       y: Math.random() * H,
       vx: (Math.random() - 0.5) * 0.4,
       vy: (Math.random() - 0.5) * 0.4,
-      r: 1.2
+      r: 1.5
     });
   }
 
@@ -769,25 +897,25 @@ function initCopyXMR() {
       const nearMouse = dmSq < MOUSE_RADIUS_SQ;
       cx.beginPath();
       cx.arc(p.x, p.y, nearMouse ? 1.8 : p.r, 0, Math.PI * 2);
-      cx.fillStyle = nearMouse ? "rgba(255,59,48,0.7)" : "#333333";
+      cx.fillStyle = nearMouse ? "rgba(255,59,48,0.8)" : "rgba(80,80,80,0.8)";
       cx.fill();
       for (let j = i + 1; j < PARTICLE_COUNT; j++) {
         const q = particles[j];
         const dx = p.x - q.x, dy = p.y - q.y;
         const distSq = dx * dx + dy * dy;
         if (distSq < CONNECT_DIST_SQ) {
-          let alpha = (1 - Math.sqrt(distSq) / 150) * 0.15;
+          let alpha = (1 - Math.sqrt(distSq) / 150) * 0.3;
           if (nearMouse) {
             const qmx = q.x - mouseX, qmy = q.y - mouseY;
             if (qmx * qmx + qmy * qmy < MOUSE_RADIUS_SQ) {
-              alpha = (1 - Math.sqrt(distSq) / 150) * 0.35;
+              alpha = (1 - Math.sqrt(distSq) / 150) * 0.5;
               cx.strokeStyle = "rgba(255,59,48," + alpha + ")";
               cx.lineWidth = 0.6;
               cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(q.x, q.y); cx.stroke();
               continue;
             }
           }
-          cx.strokeStyle = "rgba(34,34,34," + alpha * 3 + ")";
+          cx.strokeStyle = "rgba(70,70,70," + alpha * 2.5 + ")";
           cx.lineWidth = 0.6;
           cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(q.x, q.y); cx.stroke();
         }
