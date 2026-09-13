@@ -17,6 +17,7 @@ The following actions are strictly prohibited:
 - **Malicious Reverse Engineering:** Decompilation, disassembly, or any form of reverse engineering undertaken for the purpose of competitive counterfeiting, intellectual property theft, or unauthorized replication.
 - **Brand Impersonation:** Any deceptive use of the ID-CLOSE name, logo, trademarks, trade dress, visual identity, or service flow to mislead users or the public into believing an unauthorized product or service is affiliated with, endorsed by, or operated by ID-CLOSE.
 - **Unauthorized Hosting:** Deploying, mirroring, or operating any instance, fork, or derivative of the Software without explicit written authorization from ID-CLOSE.
+- **Unlawful Activities:** Using the Software or Website for any purpose that violates applicable local, national, or international laws, or employing the Software to facilitate illegal acts, extortion, malware delivery, or the concealment of unlawful materials.
 
 ## 3. Zero-Knowledge Architecture
 
@@ -31,6 +32,8 @@ ID-CLOSE has no ability to recover, decrypt, or access any vault contents under 
 ## 4. Limitation of Liability
 
 TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW:
+
+THE SOFTWARE AND WEBSITE ARE PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
 
 - ID-CLOSE shall not be liable for any loss of master passphrases, encryption keys, or vault contents.
 - ID-CLOSE shall not be liable for any direct, indirect, incidental, consequential, special, or exemplary damages arising from or related to the use of the Website or Software.
