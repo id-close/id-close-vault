@@ -201,7 +201,8 @@ body{font-family:var(--sans);background:var(--black);color:var(--white);height:1
 .extracted-hidden{display:none;margin-top:16px}
 .link-pad{padding:6px 16px}
 .field-gap{margin-top:16px}
-.unlock-overlay{display:none;position:fixed;inset:0;z-index:99998;background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;flex-direction:column;align-items:center;justify-content:center}
+.unlock-overlay{position:fixed;inset:0;z-index:99998;background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;display:flex;flex-direction:column;align-items:center;justify-content:center;visibility:hidden;pointer-events:none}
+.unlock-overlay.visible{visibility:visible;pointer-events:auto}
 .unlock-shell{width:100%;max-width:400px;padding:24px;background:#0a0a0a;border:1px solid var(--gray)}
 .xmr-amount-row{display:flex;justify-content:center;margin:12px 0 10px 0}
 .xmr-amount-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,68,0,0.35);background:rgba(255,68,0,0.04);padding:5px 14px;border-radius:3px;font-family:monospace}
@@ -324,6 +325,7 @@ input[type=number]{-moz-appearance:textfield}
 .site-footer>div:last-child code{font-size:0.625rem !important;line-height:normal !important}
 
 .unlock-active .site-footer{display:none !important}
+.unlock-active{overflow:hidden !important}
 
 @media(max-width:480px){
   .site-footer{padding-top:8px !important;padding-bottom:8px !important}
@@ -464,6 +466,8 @@ body[data-pro-open]>#particle-bg{visibility:visible !important;pointer-events:no
     -webkit-overflow-scrolling:touch;
     display:flex !important;
     flex-direction:column;
+    justify-content:center;
+    align-items:center;
   }
 
   #scr-welcome,#scr-step-decoy,#scr-step-secret{
@@ -480,9 +484,11 @@ body[data-pro-open]>#particle-bg{visibility:visible !important;pointer-events:no
     flex-shrink:0;
   }
 
-  #scr-step-secret .page{
+  #scr-step-decoy .page,#scr-step-secret .page{
     padding-bottom:50px !important;
     min-height:auto !important;
+    justify-content:center !important;
+    align-items:center !important;
   }
 
   #scr-about .page,#scr-donate .page,#scr-opsec .page{

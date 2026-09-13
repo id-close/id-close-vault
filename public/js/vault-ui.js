@@ -435,7 +435,7 @@ async function handleUnlockVault() {
 
   // Show unlock overlay
   const overlay = $("unlock-overlay");
-  overlay.classList.remove("unlock-overlay");
+  overlay.classList.add("visible");
   document.body.classList.add("unlock-active");
   $("extracted-section").classList.add("extracted-hidden");
   $("unlock-close-btn").classList.add("btn-close-overlay");
@@ -532,7 +532,7 @@ function purgeDecryptedState() {
 
   // 6. Hide the unlock overlay entirely
   const overlay = $("unlock-overlay");
-  if (overlay) overlay.classList.add("unlock-overlay");
+  if (overlay) overlay.classList.remove("visible");
   document.body.classList.remove("unlock-active");
 
   // 7. Restore any previously active screen
