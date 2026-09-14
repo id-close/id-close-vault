@@ -897,7 +897,7 @@ function initCopyXMR() {
       const nearMouse = dmSq < MOUSE_RADIUS_SQ;
       cx.beginPath();
       cx.arc(p.x, p.y, nearMouse ? 1.8 : p.r, 0, Math.PI * 2);
-      cx.fillStyle = nearMouse ? "rgba(255,59,48,0.8)" : "rgba(80,80,80,0.8)";
+      cx.fillStyle = nearMouse ? "rgba(255,62,62,0.9)" : "rgba(160,160,160,0.6)";
       cx.fill();
       for (let j = i + 1; j < PARTICLE_COUNT; j++) {
         const q = particles[j];
@@ -908,14 +908,14 @@ function initCopyXMR() {
           if (nearMouse) {
             const qmx = q.x - mouseX, qmy = q.y - mouseY;
             if (qmx * qmx + qmy * qmy < MOUSE_RADIUS_SQ) {
-              alpha = (1 - Math.sqrt(distSq) / 150) * 0.5;
-              cx.strokeStyle = "rgba(255,59,48," + alpha + ")";
+              alpha = (1 - Math.sqrt(distSq) / 150) * 0.75;
+              cx.strokeStyle = "rgba(255,62,62," + alpha + ")";
               cx.lineWidth = 0.6;
               cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(q.x, q.y); cx.stroke();
               continue;
             }
           }
-          cx.strokeStyle = "rgba(70,70,70," + alpha * 2.5 + ")";
+          cx.strokeStyle = "rgba(255,255,255," + alpha * 0.25 + ")";
           cx.lineWidth = 0.6;
           cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(q.x, q.y); cx.stroke();
         }
