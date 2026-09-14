@@ -1,0 +1,32 @@
+# Dependencies & Build artifacts
+node_modules/
+dist/
+build/
+
+# Local configuration & environment
+.env
+.env.*
+*.local
+
+# Security, Keys & Certificates
+*.key
+*.pem
+*.gpg
+*.asc
+*.cert
+*.crt
+*.pfx
+*.p12
+
+# Binaries & Encrypted Test Vaults
+*.bin
+*.enc
+*.vault
+
+# OS & Editor Bloat
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
